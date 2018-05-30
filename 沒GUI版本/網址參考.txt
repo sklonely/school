@@ -1,0 +1,6 @@
+http://blog.xuite.net/bill5024/twblog1/123434231-PYTHON%2BRS232%E5%9F%BA%E7%A4%8E%E7%AF%87   #¦ê¦C¶Ç¿é
+https://www.youtube.com/watch?v=otwMWJBSB-A  #PYTHON gspread API
+https://developers.google.com/maps/?hl=zh-tw  #google map API
+https://developers.google.com/drive/v3/web/about-sdk  #google drive API
+https://zh.wikipedia.org/wiki/%E7%BB%8F%E7%BA%AC%E5%BA%A6 #¸g½n«×
+http://pyserial.readthedocs.io/en/latest/pyserial_api.html #pyserial API

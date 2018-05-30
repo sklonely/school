@@ -1,0 +1,4 @@
+oauth2client
+pyserial
+gspread
+colorama

@@ -1,0 +1,13 @@
+{
+    "python.pythonPath": "python",
+    "python.autoComplete.addBrackets": true,
+    "python.envFile": "${workspaceFolder}/.envFile",
+    "python.autoComplete.extraPaths": [],
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "yapf",
+    "python.linting.flake8Args": [
+        "--max-line-length=321",
+        "--ignore=F401,F403,E722,E501,E266"  
+    ],
+    "python.linting.pylintEnabled": false
+}
