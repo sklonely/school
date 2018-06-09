@@ -302,6 +302,7 @@ class MyCarThread(QtCore.QThread):
         for i in range(self.sec):
             if self.falg:  # 第一次近來不做 因為沒有上次車子的位置
                 carNow = AT.GPS()
+                print(carNow)
                 carState = final.mydata(carNow, self.carLast)  # 車狀態[時速,方向]
                 while 1:
                     values_list = self.sheet.row_values(3)  # 取得救護車 最新位置

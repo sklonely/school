@@ -255,26 +255,36 @@ def AMBdata(amb1, amb2):
                 f = '南'
         elif ambf[1] - ambl[1] != 0:
             if ambf[0] - ambl[0] > 0:
-                if ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) >= 2.5 or ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) <= -2.5:
+                if ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) >= 2.5 or (
+                    (ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) <= -2.5:
                     f = '北'
-                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > 0.5 and ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < 2.5:
+                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > 0.5 and (
+                    (ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < 2.5:
                     f = '東北'
-                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < 0.5 and ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) >= 0:
+                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < 0.5 and (
+                    (ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) >= 0:
                     f = '東'
-                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < -0.5 and ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > -2.5:
+                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < -0.5 and (
+                    (ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > -2.5:
                     f = '西北'
-                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > -0.5 and ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) <= 0:
+                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > -0.5 and (
+                    (ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) <= 0:
                     f = '西'
             elif ambf[0] - ambl[0] < 0:
-                if ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) >= 2.5 or ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) <= -2.5:
+                if ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) >= 2.5 or (
+                    (ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) <= -2.5:
                     f = '南'
-                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > 0.5 and ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < 2.5:
+                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > 0.5 and (
+                    (ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < 2.5:
                     f = '西南'
-                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < 0.5 and ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > 0:
+                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < 0.5 and (
+                    (ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > 0:
                     f = '西'
-                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < -0.5 and ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > -2.5:
+                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < -0.5 and (
+                    (ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > -2.5:
                     f = '東南'
-                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > -0.5 and ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < 0:
+                elif ((ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) > -0.5 and (
+                    (ambf[0] - ambl[0]) / (ambf[1] - ambl[1])) < 0:
                     f = '東'
         elif ambf[1] - ambl[1] == 0 and ambf[0] - ambl[0] == 0:
             f = '靜止'
@@ -374,26 +384,36 @@ def AMBandmy(my1, amb1):
                 f = '南'
         elif myf[1] - ambf[1] != 0:
             if myf[0] - ambf[0] > 0:
-                if ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) >= 2.5 or ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) <= -2.5:
+                if ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) >= 2.5 or (
+                    (myf[0] - ambf[0]) / (myf[1] - ambf[1])) <= -2.5:
                     f = '北'
-                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) > 0.5 and ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) < 2.5:
+                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) > 0.5 and (
+                    (myf[0] - ambf[0]) / (myf[1] - ambf[1])) < 2.5:
                     f = '東北'
-                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) < 0.5 and ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) >= 0:
+                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) < 0.5 and (
+                    (myf[0] - ambf[0]) / (myf[1] - ambf[1])) >= 0:
                     f = '東'
-                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) < -0.5 and ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) > -2.5:
+                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) < -0.5 and (
+                    (myf[0] - ambf[0]) / (myf[1] - ambf[1])) > -2.5:
                     f = '西北'
-                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) > -0.5 and ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) <= 0:
+                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) > -0.5 and (
+                    (myf[0] - ambf[0]) / (myf[1] - ambf[1])) <= 0:
                     f = '西'
             elif myf[0] - ambf[0] < 0:
-                if ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) >= 2.5 or ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) <= -2.5:
+                if ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) >= 2.5 or (
+                    (myf[0] - ambf[0]) / (myf[1] - ambf[1])) <= -2.5:
                     f = '南'
-                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) > 0.5 and ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) < 2.5:
+                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) > 0.5 and (
+                    (myf[0] - ambf[0]) / (myf[1] - ambf[1])) < 2.5:
                     f = '西南'
-                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) < 0.5 and ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) > 0:
+                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) < 0.5 and (
+                    (myf[0] - ambf[0]) / (myf[1] - ambf[1])) > 0:
                     f = '西'
-                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) < -0.5 and ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) > -2.5:
+                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) < -0.5 and (
+                    (myf[0] - ambf[0]) / (myf[1] - ambf[1])) > -2.5:
                     f = '東南'
-                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) > -0.5 and ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) < 0:
+                elif ((myf[0] - ambf[0]) / (myf[1] - ambf[1])) > -0.5 and (
+                    (myf[0] - ambf[0]) / (myf[1] - ambf[1])) < 0:
                     f = '東'
         elif myf[1] - ambf[1] == 0 and myf[0] - ambf[0] == 0:
             f = '無'

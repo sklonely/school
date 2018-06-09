@@ -15,15 +15,16 @@ while 1:
 
 
 class GoogleSheet():
-
     def init(self, sheetName):
         try:
             global scope, creds, client, sheet
             scope = ['https://www.googleapis.com/auth/drive']  # host sever
             creds = ServiceAccountCredentials.from_json_keyfile_name(
-                sys.path[0] + '/client_secret.json', scope)  # atuh 驗證 記得準備認證用的檔案
+                sys.path[0] + '/client_secret.json',
+                scope)  # atuh 驗證 記得準備認證用的檔案
             client = gspread.authorize(creds)  # 雲端硬碟宣告
-            sheet = client.open(sheetName).sheet1  # 試算表宣告(括號內要改成你自己雲端裡面的sheet檔案)
+            sheet = client.open(
+                sheetName).sheet1  # 試算表宣告(括號內要改成你自己雲端裡面的sheet檔案)
             print("找到資料表: " + str(sheet))
         except gspread.exceptions.SpreadsheetNotFound:
             print('沒找到sheet檔案，請確認後再一次')
@@ -55,6 +56,7 @@ class GoogleSheet():
             return "cell error"
         else:
             return res
+
 
 # init("你要開的sheet檔案名稱")
 # ---------------指令簡約表
