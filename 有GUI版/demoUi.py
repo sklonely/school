@@ -1,32 +1,42 @@
 # -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'demo.ui'
-#
-# Created by: PyQt5 UI code generator 5.9.2
-#
-# farm8 GPS  farm13 NET
-# WARNING! All changes made in this file will be lost!
-
-while 1:  # auto import fix mod
+# import自動修復 程式碼片段Stste
+lestModName = ""
+err = ""
+while 1:
     try:
-        # 系統mods
-        import os
         import sys
+        import os
+        # 要import的東西放這下面
         from PyQt5 import QtCore, QtGui, QtWidgets
-        import time
         sys.path.append(sys.path[0] + '/mods/')  # 將自己mods的路徑加入倒python lib裡面
-        # 自己的mods
+        import time
         import requests
         import httplib2
         import AT  # AT命令
         import googlesheet
         import final  # 車距計算
-    except ModuleNotFoundError:
-        err = str(sys.exc_info()[1])
-        print("缺少mod name: " + err[17:-1] + "正在進行安裝")
-        os.system('pip install ' + err[17:-1])
+    except ModuleNotFoundError:  # python 3.5以上適用
+        err = str(sys.exc_info()[1])[17:-1]
+        if (lestModName != err):
+            print("缺少mod: " + err + " 正在嘗試進行安裝")
+            os.system("pip install " + err)
+            lestModName = err
+        else:
+            print("無法修復import問題 請人工檢查", "mod name: " + err)
+            sys.exit()
+    except ImportError:  # python 3.5以下適用
+        err = str(sys.exc_info()[1])[17:-1]
+        if (lestModName != err):
+            print("缺少mod: " + err + " 正在嘗試進行安裝")
+            os.system("pip install " + err)
+            lestModName = err
+        else:
+            print("無法修復import問題 請人工檢查", "mod name: " + err)
+            sys.exit()
     else:
+        del lestModName, err
         break
+# import自動修復 程式碼片段
 
 
 class Ui_MainWindow(object):
@@ -337,7 +347,7 @@ class MyCarThread(QtCore.QThread):
                                 break
                             print("sheet 抓不到資料...")
                             time.sleep(0.5)
-                        self.sheet.insert_row(carNow)
+
                         ambCarM = final.AMBandmy(
                             carNow, values_list[1])  # 車跟救護車[距離(M),方向]
                         ambState = final.AMBdata(values_list[1],
@@ -350,6 +360,7 @@ class MyCarThread(QtCore.QThread):
                             str(ambState[0]),
                             str(self.netFalg)
                         ]
+                        print(self.sheet.insert_row(carNow))  # 除錯用
                     else:
                         self.carLast = AT.GPS()
                         self.falg = 1
@@ -366,7 +377,7 @@ class MyCarThread(QtCore.QThread):
             self.sec_changed_signal.emit(self.state)  # 觸發函式
             time.sleep(self.timerTime)
 
-    def netTest(self):
+    def netTest(self):  # 網路檢測
         try:
             requests.get('https://www.google.com.tw/')
         except requests.exceptions.ConnectionError:
