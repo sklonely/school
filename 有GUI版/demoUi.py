@@ -16,6 +16,7 @@ while 1:  # auto import fix mod
         import time
         sys.path.append(sys.path[0] + '/mods/')  # 將自己mods的路徑加入倒python lib裡面
         # 自己的mods
+        import httplib2
         import AT  # AT命令
         import googlesheet
         import final  # 車距計算
@@ -211,8 +212,7 @@ class Ui_MainWindow(object):
         self.label_16.setGeometry(QtCore.QRect(0, 0, 781, 481))
         self.label_16.setStyleSheet("border:2px;\n" "border-radius:20px")
         self.label_16.setText("")
-        self.label_16.setPixmap(
-            QtGui.QPixmap(sys.path[0] + "/UIimg/true.jpg"))
+        self.label_16.setPixmap(QtGui.QPixmap(sys.path[0] + "/UIimg/true.jpg"))
         self.label_16.setObjectName("label_16")
         self.label_16.raise_()
         self.frame.raise_()
@@ -224,11 +224,13 @@ class Ui_MainWindow(object):
 
         # timer
         self.uiThread = MyThread()  # 创建一个线程
-        self.uiThread.sec_changed_signal.connect(self.uiUpData)  # 觸發訊號導正到timeup去
+        self.uiThread.sec_changed_signal.connect(
+            self.uiUpData)  # 觸發訊號導正到timeup去
         self.uiThread.start()
         self.carThread = MyCarThread()  # 创建一个线程
         self.carThread.timerTime = 3  # 設定timer每5秒動作一次
-        self.carThread.sec_changed_signal.connect(self.carUpData)  # 觸發訊號導正到timeup去
+        self.carThread.sec_changed_signal.connect(
+            self.carUpData)  # 觸發訊號導正到timeup去
         self.carThread.start()
         # end timer
 
@@ -262,7 +264,8 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", localtime))
         self.label_14.setText(_translate("MainWindow", self.state[1]))
         self.label_4.setText(_translate("MainWindow", self.state[0]))
-        self.label_2.setText(_translate("MainWindow", "距離: " + self.state[2] + "公尺"))
+        self.label_2.setText(
+            _translate("MainWindow", "距離: " + self.state[2] + "公尺"))
         self.frame_13.setStyleSheet("background-color:rgb(0,255,0)")
         self.frame_7.setStyleSheet("background-color:rgb(0,255,0)")
 
@@ -282,7 +285,8 @@ class MyThread(QtCore.QThread):
 
     def run(self):
         for i in range(self.sec):
-            self.sec_changed_signal.emit(time.strftime("%H:%M:%S", time.localtime()))  # 觸發函式
+            self.sec_changed_signal.emit(
+                time.strftime("%H:%M:%S", time.localtime()))  # 觸發函式
             time.sleep(self.timerTime)
 
 
@@ -294,33 +298,57 @@ class MyCarThread(QtCore.QThread):
         super().__init__(parent)
         self.sec = sec  # 默认1000秒
         self.timerTime = 3
+        self.state = ["0 KM/H", "無", "99999"]
         self.falg = 0
+        self.netFalg = 0
         self.sheet = googlesheet.GoogleSheet()
-        self.sheet.init('test')
+        try:
+            self.sheet.init('test')
+        except httplib2.ServerNotFoundError:
+            self.netFalg = 0
+            print("無網路從新連接...")
+        else:
+            self.netFalg = 1
+            print("連接成功")
 
     def run(self):
         for i in range(self.sec):
-            if self.falg:  # 第一次近來不做 因為沒有上次車子的位置
-                carNow = AT.GPS()
-                print(carNow)
-                carState = final.mydata(carNow, self.carLast)  # 車狀態[時速,方向]
-                while 1:
-                    values_list = self.sheet.row_values(3)  # 取得救護車 最新位置
-                    values_list1 = self.sheet.row_values(4)  # 取得救護車 上次位置
-                    if (values_list and values_list1):
-                        break
-                    print("sheet 抓不到資料...")
-                    time.sleep(0.5)
-                ambCarM = final.AMBandmy(carNow, values_list[1])  # 車跟救護車[距離(M),方向]
-                ambState = final.AMBdata(values_list[1], values_list1[1])  # 救護車[時速,方向]
-                self.carLast = carNow
+            if self.netFalg:  # 網路旗標 有無網路
+                if self.falg:  # 第一次近來不做 因為沒有上次車子的位置
+                    carNow = AT.GPS()
+                    print(carNow)
+                    carState = final.mydata(carNow, self.carLast)  # 車狀態[時速,方向]
+                    while 1:
+                        values_list = self.sheet.row_values(3)  # 取得救護車 最新位置
+                        values_list1 = self.sheet.row_values(4)  # 取得救護車 上次位置
+                        if (values_list and values_list1):
+                            break
+                        print("sheet 抓不到資料...")
+                        time.sleep(0.5)
+                    ambCarM = final.AMBandmy(carNow,
+                                             values_list[1])  # 車跟救護車[距離(M),方向]
+                    ambState = final.AMBdata(values_list[1],
+                                             values_list1[1])  # 救護車[時速,方向]
+                    self.carLast = carNow
 
-                self.state = [str(carState[0]) + " KM/H", str(ambCarM[1]), str(ambState[0])]
+                    self.state = [
+                        str(carState[0]) + " KM/H",
+                        str(ambCarM[1]),
+                        str(ambState[0])
+                    ]
+                else:
+                    self.carLast = AT.GPS()
+                    self.falg = 1
+
+                    self.state = ["0 KM/H", "無", "99999"]
             else:
-                self.carLast = AT.GPS()
-                self.falg = 1
-
-                self.state = ["0 KM/H", "無", "99999"]
+                try:
+                    self.sheet.init('test')
+                except httplib2.ServerNotFoundError:
+                    self.netFalg = 0
+                    print("無網路從新連接...")
+                else:
+                    self.netFalg = 1
 
             self.sec_changed_signal.emit(self.state)  # 觸發函式
             time.sleep(self.timerTime)
