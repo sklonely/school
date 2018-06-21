@@ -9,5 +9,6 @@
         "--max-line-length=321",
         "--ignore=F401,F403,E722,E501,E266"  
     ],
-    "python.linting.pylintEnabled": false
+    "python.linting.pylintEnabled": false,
+    "files.autoSave": "afterDelay"
 }

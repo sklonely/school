@@ -16,6 +16,7 @@ while 1:  # auto import fix mod
         import time
         sys.path.append(sys.path[0] + '/mods/')  # 將自己mods的路徑加入倒python lib裡面
         # 自己的mods
+        import requests
         import httplib2
         import AT  # AT命令
         import googlesheet
@@ -168,13 +169,13 @@ class Ui_MainWindow(object):
         self.frame_8.setObjectName("frame_8")
         self.frame_13 = QtWidgets.QFrame(self.frame_5)
         self.frame_13.setGeometry(QtCore.QRect(40, 120, 61, 31))
-        self.frame_13.setStyleSheet("background-color:rgb(0,255,0)")
+        self.frame_13.setStyleSheet("background-color:rgb(255,255,0)")
         self.frame_13.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_13.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_13.setObjectName("frame_13")
         self.frame_14 = QtWidgets.QFrame(self.frame_13)
         self.frame_14.setGeometry(QtCore.QRect(30, 40, 61, 41))
-        self.frame_14.setStyleSheet("background-color:rgb(255,0,0)")
+        self.frame_14.setStyleSheet("background-color:rgb(255,255,0)")
         self.frame_14.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_14.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_14.setObjectName("frame_14")
@@ -238,7 +239,7 @@ class Ui_MainWindow(object):
         self.carLast = 0  # 車初始化 上次位置
         self.falg = 0
         self.timeCounter = 0
-        self.state = ["0 KM/H", "無", "99999"]
+        self.state = ["0 KM/H", "無", "99999", "0"]
         # 結束宣告區
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -261,13 +262,19 @@ class Ui_MainWindow(object):
 
     def uiUpData(self, localtime):
         _translate = QtCore.QCoreApplication.translate
+        # 時間
         self.label_7.setText(_translate("MainWindow", localtime))
+        # 車況
         self.label_14.setText(_translate("MainWindow", self.state[1]))
         self.label_4.setText(_translate("MainWindow", self.state[0]))
         self.label_2.setText(
             _translate("MainWindow", "距離: " + self.state[2] + "公尺"))
-        self.frame_13.setStyleSheet("background-color:rgb(0,255,0)")
-        self.frame_7.setStyleSheet("background-color:rgb(0,255,0)")
+        # 狀態表
+        if (self.state[3] == "1"):
+            self.frame_13.setStyleSheet("background-color:rgb(0,255,0)")  # NET
+        else:
+            self.frame_13.setStyleSheet("background-color:rgb(255,0,0)")  # NET
+        self.frame_7.setStyleSheet("background-color:rgb(0,255,0)")  # GPS
 
     def carUpData(self, stateIn):
         self.state = stateIn
@@ -294,11 +301,11 @@ class MyCarThread(QtCore.QThread):
 
     sec_changed_signal = QtCore.pyqtSignal(list)  # 回傳型態：list
 
-    def __init__(self, sec=1000, parent=None):
+    def __init__(self, sec=100000, parent=None):
         super().__init__(parent)
         self.sec = sec  # 默认1000秒
         self.timerTime = 3
-        self.state = ["0 KM/H", "無", "99999"]
+        self.state = ["0 KM/H", "無", "99999", "0"]
         self.falg = 0
         self.netFalg = 0
         self.sheet = googlesheet.GoogleSheet()
@@ -306,52 +313,61 @@ class MyCarThread(QtCore.QThread):
             self.sheet.init('test')
         except httplib2.ServerNotFoundError:
             self.netFalg = 0
-            print("無網路從新連接...")
+            print("無網路重新連接...")
         else:
             self.netFalg = 1
             print("連接成功")
 
     def run(self):
         for i in range(self.sec):
-            if self.netFalg:  # 網路旗標 有無網路
-                if self.falg:  # 第一次近來不做 因為沒有上次車子的位置
-                    carNow = AT.GPS()
-                    print(carNow)
-                    carState = final.mydata(carNow, self.carLast)  # 車狀態[時速,方向]
-                    while 1:
-                        values_list = self.sheet.row_values(3)  # 取得救護車 最新位置
-                        values_list1 = self.sheet.row_values(4)  # 取得救護車 上次位置
-                        if (values_list and values_list1):
-                            break
-                        print("sheet 抓不到資料...")
-                        time.sleep(0.5)
-                    ambCarM = final.AMBandmy(carNow,
-                                             values_list[1])  # 車跟救護車[距離(M),方向]
-                    ambState = final.AMBdata(values_list[1],
-                                             values_list1[1])  # 救護車[時速,方向]
-                    self.carLast = carNow
+            self.netTest()
+            try:
+                if self.netFalg:  # 網路旗標 有無網路
+                    if self.falg:  # 第一次近來不做 因為沒有上次車子的位置
+                        carNow = AT.GPS()
+                        print(carNow)
+                        carState = final.mydata(carNow, self.carLast)  # 車狀態[時速,方向]
+                        while 1:
+                            values_list = self.sheet.row_values(3)  # 取得救護車 最新位置
+                            values_list1 = self.sheet.row_values(4)  # 取得救護車 上次位置
+                            if (values_list and values_list1):
+                                break
+                            print("sheet 抓不到資料...")
+                            time.sleep(0.5)
+                        ambCarM = final.AMBandmy(carNow,
+                                                values_list[1])  # 車跟救護車[距離(M),方向]
+                        ambState = final.AMBdata(values_list[1],
+                                                values_list1[1])  # 救護車[時速,方向]
+                        self.carLast = carNow
 
-                    self.state = [
-                        str(carState[0]) + " KM/H",
-                        str(ambCarM[1]),
-                        str(ambState[0])
-                    ]
-                else:
-                    self.carLast = AT.GPS()
-                    self.falg = 1
+                        self.state = [
+                            str(carState[0]) + " KM/H",
+                            str(ambCarM[1]),
+                            str(ambState[0]),
+                            str(self.netFalg)
+                        ]
+                    else:
+                        self.carLast = AT.GPS()
+                        self.falg = 1
 
-                    self.state = ["0 KM/H", "無", "99999"]
-            else:
-                try:
-                    self.sheet.init('test')
-                except httplib2.ServerNotFoundError:
-                    self.netFalg = 0
-                    print("無網路從新連接...")
+                        self.state = ["0 KM/H", "無", "99999", str(self.netFalg)]
                 else:
-                    self.netFalg = 1
+                    self.state = ["0 KM/H", "無", "99999", str(self.netFalg)]
+            except :
+                self.state = ["0 KM/H", "無", "99999", str(self.netFalg)]
 
             self.sec_changed_signal.emit(self.state)  # 觸發函式
             time.sleep(self.timerTime)
+
+    def netTest(self):
+        try:
+            requests.get('https://www.google.com.tw/')
+        except requests.exceptions.ConnectionError:
+            self.netFalg = 0
+            print("失去網路訊號重新連接中...")
+        else:
+            print()
+            self.netFalg = 1
 
 
 if __name__ == "__main__":
