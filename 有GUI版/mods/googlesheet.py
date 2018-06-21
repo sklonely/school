@@ -4,6 +4,7 @@ while 1:
         # import datetime  # 時間
         import sys
         import gspread  # 雲端
+        import datetime
         from oauth2client.service_account import \
             ServiceAccountCredentials  # google oauth
     except ModuleNotFoundError:
@@ -57,6 +58,18 @@ class GoogleSheet():
         else:
             return res
 
+    def insert_row(self, data):
+        timer = datetime.datetime.now()  # 取得現在時間
+        try:
+            res = sheet.insert_row([str(timer), data], 3)
+        except:
+            return "cell error"
+        else:
+            return res
+
+t = GoogleSheet()
+t.init("test")
+t.insert_row("1")
 
 # init("你要開的sheet檔案名稱")
 # ---------------指令簡約表

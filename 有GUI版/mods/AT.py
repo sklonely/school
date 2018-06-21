@@ -31,7 +31,7 @@ def GPS():
         # print("3")
         temp = ser.readlines()[1].decode("UTF-8")
         if temp.find("CGPSINFO") != -1:  # find "CGPSINFO" in GPS information
-            # print("Success getData: ",temp) DEBUG
+            print("Success getData: ", temp)  # DEBUG
             return temp  # array[1] is the information that we want
         else:
             print("GPS Fail")

@@ -326,18 +326,22 @@ class MyCarThread(QtCore.QThread):
                     if self.falg:  # 第一次近來不做 因為沒有上次車子的位置
                         carNow = AT.GPS()
                         print(carNow)
-                        carState = final.mydata(carNow, self.carLast)  # 車狀態[時速,方向]
+                        carState = final.mydata(carNow,
+                                                self.carLast)  # 車狀態[時速,方向]
                         while 1:
-                            values_list = self.sheet.row_values(3)  # 取得救護車 最新位置
-                            values_list1 = self.sheet.row_values(4)  # 取得救護車 上次位置
+                            values_list = self.sheet.row_values(
+                                3)  # 取得救護車 最新位置
+                            values_list1 = self.sheet.row_values(
+                                4)  # 取得救護車 上次位置
                             if (values_list and values_list1):
                                 break
                             print("sheet 抓不到資料...")
                             time.sleep(0.5)
-                        ambCarM = final.AMBandmy(carNow,
-                                                values_list[1])  # 車跟救護車[距離(M),方向]
+                        self.sheet.insert_row(carNow)
+                        ambCarM = final.AMBandmy(
+                            carNow, values_list[1])  # 車跟救護車[距離(M),方向]
                         ambState = final.AMBdata(values_list[1],
-                                                values_list1[1])  # 救護車[時速,方向]
+                                                 values_list1[1])  # 救護車[時速,方向]
                         self.carLast = carNow
 
                         self.state = [
@@ -350,10 +354,13 @@ class MyCarThread(QtCore.QThread):
                         self.carLast = AT.GPS()
                         self.falg = 1
 
-                        self.state = ["0 KM/H", "無", "99999", str(self.netFalg)]
+                        self.state = [
+                            "0 KM/H", "無", "99999",
+                            str(self.netFalg)
+                        ]
                 else:
                     self.state = ["0 KM/H", "無", "99999", str(self.netFalg)]
-            except :
+            except:
                 self.state = ["0 KM/H", "無", "99999", str(self.netFalg)]
 
             self.sec_changed_signal.emit(self.state)  # 觸發函式
