@@ -262,7 +262,7 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "299km/h"))
         self.label_13.setText(_translate("MainWindow", "救護車方位："))
         self.label_14.setText(_translate("MainWindow", "左前方"))
-        self.label_15.setText(_translate("MainWindow", "箭頭圖片"))
+        #self.label_15.setText(_translate("MainWindow", "箭頭圖片"))
         self.label.setText(_translate("MainWindow", "目前時間"))
         self.label_7.setText(_translate("MainWindow", "00:00:00"))
         self.label_8.setText(_translate("MainWindow", "系統狀態"))
@@ -360,7 +360,7 @@ class MyCarThread(QtCore.QThread):
                             str(ambState[0]),
                             str(self.netFalg)
                         ]
-                        print(self.sheet.insert_row(carNow))  # 除錯用
+
                     else:
                         self.carLast = AT.GPS()
                         self.falg = 1

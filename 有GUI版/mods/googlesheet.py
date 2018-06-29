@@ -67,10 +67,6 @@ class GoogleSheet():
         else:
             return res
 
-t = GoogleSheet()
-t.init("test")
-t.insert_row("1")
-
 # init("你要開的sheet檔案名稱")
 # ---------------指令簡約表
 # sheet.insert_row(data, 3)  # 在row 3 插入資料
