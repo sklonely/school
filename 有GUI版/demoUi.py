@@ -357,7 +357,7 @@ class MyCarThread(QtCore.QThread):
                         self.state = [
                             str(carState[0]) + " KM/H",
                             str(ambCarM[1]),
-                            str(ambState[0]),
+                            str(ambCarM [0]),
                             str(self.netFalg)
                         ]
 
